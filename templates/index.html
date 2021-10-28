@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='index.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <div id="full-page">
+        <div id="header">
+            Image Compression
+        </div>
+
+        <div id="content">
+            <p id="input-your-image">
+                Input your Image
+            </p>
+
+            <div id="user-input">
+            	<form action='/' method='POST' id='submitimg' enctype=multipart/form-data>
+	                <div id="input-picture">
+	                        <input type="file" name="picturetobeinputted" id="choose-file">
+	                </div>
+	                <input type="submit">
+	                <div id="compression-rate">
+                        Image Compression Rate: 
+                        <input type="text" name="ratetobeinputted" id="" placeholder = "0">
+                	</div>
+	            </form>
+                 
+            </div>
+
+            <div id="before-after-picture">
+                <div id="before-picture">
+                    Before
+                    <br>
+                    <img src= {{ before }} alt="">
+                </div>
+                <div id="after-picture">
+                    After
+                    <br>
+                    <img src= {{ after }} alt="">
+                </div>
+            </div>
+
+            <div id="footer">
+                <div id="effect-detail">
+                    <div id="percentage">
+                        Image pixel difference percentage: 
+                        <p id="percentage-number"></p>
+                    </div>
+                    <div id="compression">
+                        Image compression time: 
+                        <p id="compression-time"></p>
+                    </div>
+                </div>
+
+                <div id="download-button">
+                    <button>Download</button>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</body>
+</html>
