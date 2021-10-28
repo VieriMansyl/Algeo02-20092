@@ -1,4 +1,4 @@
-# image = directory foto => "Desktop/FolderA/ini_foto.png"
+# image = directory foto => "Folder_ini/static/ini_foto.png"
 # compression_rate = xx%
 
 def compress(image, compression_rate):
@@ -6,3 +6,9 @@ def compress(image, compression_rate):
 	print(compression_rate)
 	print(image)
 	print("End")
+
+	# Sample Output
+	# Start
+	# 70
+	# static\lenna.png
+	# End
