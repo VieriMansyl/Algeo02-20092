@@ -19,7 +19,7 @@
     py -m venv venv
     ./venv/Scripts/Activate.ps1
     ```
-5. Pip install
+5. Install library yang digunakan
     ```
     pip install flask
     pip install numpy
