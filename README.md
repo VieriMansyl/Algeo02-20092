@@ -19,7 +19,7 @@
     py -m venv venv
     ./venv/Scripts/Activate.ps1
     ```
-5. Install library yang digunakan
+5. Install library yang akan digunakan
     ```
     pip install flask
     pip install numpy
@@ -29,18 +29,25 @@
     flask run
     ```
 7. Copy IP address dan port yang tertera pada Windows PowerShell
-    ```
+    <br/>
+    <br/>
     Misalnya Tertera:
+    ```
     * Environment: production
     WARNING: This is a development server. Do not use it in a production deployment.
     Use a production WSGI server instead.
     * Debug mode: off
     * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-
-    Yang dicopy:
-    http://127.0.0.1:5000/
     ```
+    Yang dicopy:   
+    `http://127.0.0.1:5000/`
+    <br/>
+    <br/>
+
 8. Paste hasil copy-an tersebut pada browser
+
+<br/>
+<br/>
 
 ## Tampilan Cara Set-Up Virtual Environtment pada Windows PowerShell
 ![Tampilan pada windows powershell](./readme-related/wps.jpg)
