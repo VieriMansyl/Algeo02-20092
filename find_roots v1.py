@@ -17,6 +17,7 @@ def lambdaMat(mat , need):
   for i in range(len(mat)):
     newMat.append(np.array(mat[i]) * -1)
     newMat[i][i] = need + newMat[i][i]
+  
     
   return newMat
 

@@ -12,7 +12,7 @@ c = np.array([-2, -4, need - 2])
 all = [a, b, c]
 matAll = Matrix(all)
 deter = matAll.det()
-print(matAll.det())
+print(deter)
 
 koef = Poly(deter).all_coeffs()
 print(koef)
