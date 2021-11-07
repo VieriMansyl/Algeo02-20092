@@ -67,9 +67,6 @@ def solveGauss(mat):
 
 #membentuk matriks Eigen (pembentuk matriks U dan V)
 def makeMatEigen(mat , matEigen):
-  if (len(matEigen) == 0):
-    matEigen = []
-  else:
     transpose_solusi = np.transpose(mat)
     for i in range(1 , len(mat[0])):
       matEigen.append(transpose_solusi[i])
