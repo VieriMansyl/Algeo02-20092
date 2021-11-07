@@ -5,6 +5,15 @@ from sympy import symbols, Matrix, Symbol, Poly
 from sympy.polys.groebnertools import sig
 import math
 
+#makeTransMat -> membentuk matriks AAt / AtA
+#typeMat = 0 -> membentuk AAt
+#typeMat = 1 -> membentuk AtA
+def makeTransMat(mat , typeMat):
+  if(typeMat == 0):
+    return np.matmul(mat , np.transpose(mat))
+  else:
+    np.matmul(np.transpose(mat) , mat)
+
 #lambdaMat -> untuk menghasilkan matriks (λI - AAt)
 def lambdaMat(mat , need):
   newMat = []
@@ -17,7 +26,7 @@ def lambdaMat(mat , need):
 
 #find_roots -> menghasilkan akar-akar  (a.k.a. nilai eigen) dari matriks Mat
 def find_roots(mat):
-  aat = np.matmul(mat , np.transpose(mat))
+  aat = makeTransMat(mat,0)
   need = Symbol('l')
 
   matAll = Matrix(lambdaMat(aat , need))
