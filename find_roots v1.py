@@ -16,8 +16,8 @@ def lambdaMat(mat , need):
   return newMat
 
 #find_roots -> menghasilkan akar-akar  (a.k.a. nilai eigen) dari matriks Mat
-def find_roots(Mat):
-  aat = np.matmul(Mat , np.transpose(Mat))
+def find_roots(mat):
+  aat = np.matmul(mat , np.transpose(mat))
   need = Symbol('l')
 
   matAll = Matrix(lambdaMat(aat , need))
