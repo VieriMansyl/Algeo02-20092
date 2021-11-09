@@ -16,260 +16,283 @@ import math
 # lalu hasilnya disimpan dalam folder static
 # dan me-return directory dari foto tersebut
 def compress(image, compression_rate):
-    start = time.time()
-    print("Start")				# Start
-    print(compression_rate)		# 70
-    print(image)				# static\lenna.png
-    print("End")				# End
+	start = time.time()
+	print("Start")				# Start
+	print(compression_rate)		# 70
+	print(image)				# static\lenna.png
+	print("End")				# End
 
-    # return("static/hasil.png")
-    src = cv.imread(image, cv.IMREAD_ANYCOLOR)
+	# return("static/hasil.png")
+	src = cv.imread(image, cv.IMREAD_ANYCOLOR)
 
-    b, g, r = np.split(src)	 # b, g, r masing-masing channel
+	b, g, r = np.split(src)	 # b, g, r masing-masing channel
 
-    bt = np.transpose(b)  # Transpose b, g, r
-    gt = np.transpose(g)
-    rt = np.transpose(r)
+	# bt = np.transpose(b)  # Transpose b, g, r
+	# gt = np.transpose(g)
+	# rt = np.transpose(r)
 
-    # Untuk AAT
-    broot1, bsigma1 = findroots(np.matmul(b, bt))
-    groot1, gsigma1 = findroots(np.matmul(g, gt))
-    rroot1, rsigma1 = findroots(np.matmul(r, rt))
+	# Untuk AAT
+	# broot1, bsigma1 = findroots(np.matmul(b, bt))
+	# groot1, gsigma1 = findroots(np.matmul(g, gt))
+	# rroot1, rsigma1 = findroots(np.matmul(r, rt))
 
-    # Untuk ATA
-    broot2, bsigma2 = findroots(np.matmul(bt, b))
-    groot2, gsigma2 = findroots(np.matmul(gt, g))
-    rroot2, rsigma2 = findroots(np.matmul(rt, r))
+	# # Untuk ATA
+	# broot2, bsigma2 = findroots(np.matmul(bt, b))
+	# groot2, gsigma2 = findroots(np.matmul(gt, g))
+	# rroot2, rsigma2 = findroots(np.matmul(rt, r))
 
-    end = time.time()
-    delta = start - end
+	
 
 
-def findroots(matT):
 
-    vars = Symbol('x')  # Variabel yang dipakai
+	end = time.time()
+	delta = start - end
+	return delta
 
-    all = []
-    for i in range(len(matT)):
-        each = []
-        for j in range(len(matT[0])):
-            if(i == j):
-                each.append(vars - matT[i][j])  # ngisi kalau diagonal
-            else:
-                each.append(-matT[i][j])  # ngisi selain diagonal
+# def findroots(matT):
 
-        npeach = np.array(each)  # Convert ke np array
-        all.append(npeach)
+# 	vars = Symbol('x')  # Variabel yang dipakai
 
-    matAll = Matrix(all)
-    deter = matAll.det()
+# 	all = []
+# 	for i in range(len(matT)):
+# 		each = []
+# 		for j in range(len(matT[0])):
+# 			if(i == j):
+# 				each.append(vars - matT[i][j])  # ngisi kalau diagonal
+# 			else:
+# 				each.append(-matT[i][j])  # ngisi selain diagonal
 
-    return convDetKoef(deter)
+# 		npeach = np.array(each)  # Convert ke np array
+# 		all.append(npeach)
 
+# 	matAll = Matrix(all)
+# 	deter = matAll.det()
 
-def convDetKoef(determinant):
-    koef = Poly(determinant).all_coeffs()  # Create koeficient lienar equation
+# 	return convDetKoef(deter)
 
-    froot = np.roots(koef)  # Cari akar-akar persamaan
 
-    # Sort descending
-    froot.sort()
+# def convDetKoef(determinant):
+# 	koef = Poly(determinant).all_coeffs()  # Create koeficient lienar equation
 
-    froot = froot[::-1]
-    return convKoefRoot(froot)
+# 	froot = np.roots(koef)  # Cari akar-akar persamaan
 
-# Convert Koeficient to Root and Sigma
+# 	# Sort descending
+# 	froot.sort()
 
+# 	froot = froot[::-1]
+# 	return convKoefRoot(froot)
 
-def convKoefRoot(rawroot):
-    newroot = []
-    newsigma = []
+# # Convert Koeficient to Root and Sigma
 
-    for root in rawroot:
-        if(root >= 0):
-            newroot.append(root)
-            newsigma.append(root ** 0.5)
 
-    sigma = np.array(newsigma)
-    finalroot = np.array(newroot)
+# def convKoefRoot(rawroot):
+# 	newroot = []
+# 	newsigma = []
 
-    return newroot, newsigma
+# 	for root in rawroot:
+# 		if(root > 0):
+# 			newroot.append(root)
+# 			newsigma.append(root ** 0.5)
+# 		elif(root == 0):
+# 			if(0 not in newsigma):
+# 				newroot.append(root)
+# 				newsigma.append(root ** 0.5)
 
+# 	sigma = np.array(newsigma)
+# 	finalroot = np.array(newroot)
 
-# makeTransMat -> membentuk matriks AAt / AtA
-# typeMat = 0 -> membentuk AAt
-# typeMat = 1 -> membentuk AtA
-def makeTransMat(mat, typeMat):
-    if(typeMat == 0):
-        return np.matmul(mat, np.transpose(mat))
-    else:
-        return np.matmul(np.transpose(mat), mat)
+# 	return newroot, newsigma
 
 
-# lambdaMat -> untuk menghasilkan matriks (λI - AAt)
-def lambdaMat(mat, need):
-    newMat = []
-    for i in range(len(mat)):
-        newMat.append(np.array(mat[i]) * -1)
-        newMat[i][i] = need + newMat[i][i]
+# # makeTransMat -> membentuk matriks AAt / AtA
+# # typeMat = 0 -> membentuk AAt
+# # typeMat = 1 -> membentuk AtA
+# def makeTransMat(mat, typeMat):
+# 	if(typeMat == 0):
+# 		return np.matmul(mat, np.transpose(mat))
+# 	else:
+# 		return np.matmul(np.transpose(mat), mat)
 
-    return newMat
 
+# # lambdaMat -> untuk menghasilkan matriks (λI - AAt)
+# def lambdaMat(mat, need):
+# 	newMat = []
+# 	for i in range(len(mat)):
+# 		newMat.append(np.array(mat[i]) * -1)
+# 		newMat[i][i] = need + newMat[i][i]
 
-'''*********************************Gauss*********************************'''
+# 	return newMat
 
-# mencari baris dengan 1 utama di kolom yang berkorespondesi pada baris tersebut
 
+# '''*********************************Gauss*********************************'''
 
-def getRowMain(mat, i):
-    found1Utama = False
-    row = i+1
+# # mencari baris dengan 1 utama di kolom yang berkorespondesi pada baris tersebut
 
-    while (row > 0 and not(found1Utama)):
-        row -= 1
-        col = 0
-        nonZero = False
 
-    while (col <= i-1 and not(nonZero)):
-        if(mat[row][col] != 0):
-            nonZero = True
-        else:
-            col += 1
+# def getRowMain(mat, i):
+# 	found1Utama = False
+# 	row = i+1
 
-    if (not(nonZero) and (mat[row][col] == 1)):
-        found1Utama = True
+# 	while (row > 0 and not(found1Utama)):
+# 		row -= 1
+# 		col = 0
+# 		nonZero = False
 
-    if ((row == 0) and not (found1Utama)):
-        row = 999
-    return row
+# 	while (col <= i-1 and not(nonZero)):
+# 		if(mat[row][col] != 0):
+# 			nonZero = True
+# 		else:
+# 			col += 1
 
-# mengembalikan nilai tiap variabel (x1,x2,...x ke-n) bersesuaian pada matriks
+# 	if (not(nonZero) and (mat[row][col] == 1)):
+# 		found1Utama = True
 
+# 	if ((row == 0) and not (found1Utama)):
+# 		row = 999
+# 	return row
 
-def getValue(mat):
-    idx_UNDEF = 999
-    paramCol = 0
+# # mengembalikan nilai tiap variabel (x1,x2,...x ke-n) bersesuaian pada matriks
 
-  # inisialisasi matriks solusi -> menyimpan nilai konstanta berserta keof. parameternya
-    solusi = [[0 for i in range(len(mat[0]))] for j in range(len(mat[0]))]
 
-    print(len(mat))
-    for i in range(len(mat)-1, -1, -1):  # dari X ke-n s.d. X1
-        if (getRowMain(mat, i) == idx_UNDEF):
-            paramCol += 1
-            print(i)
-            print(len(solusi))
-            print(len(solusi[0]))
-            solusi[i][paramCol] = 1
+# def getValue(mat):
+# 	idx_UNDEF = 999
+# 	paramCol = 0
 
-        else:
-            rowMain = getRowMain(mat, i)
-            # C , p , q , dst (C : constant ; p,q,... : parameter)
-            for j in range(0, paramCol, 1):
-                if(j == 0):
-                    solusi[i][j] = mat[rowMain][len(mat[i])-1]
+#   # inisialisasi matriks solusi -> menyimpan nilai konstanta berserta keof. parameternya
+# 	solusi = [[0 for i in range(len(mat[0]))] for j in range(len(mat[0]))]
 
-            for k in range(i+1, len(mat), 1):
-                solusi[i][j] -= mat[rowMain][k] * solusi[k][j]
+# 	# Kalau baris paling bawah 1, berarti dia kepake parameternya (atau nggak full 0)
+# 	for i in range(len(mat)-1, -1, -1):  # dari X ke-n s.d. X1
+# 		if (getRowMain(mat, i) == idx_UNDEF):
+# 			paramCol += 1
+# 			solusi[i][paramCol] = 1
+# 			solusi[len(solusi) - 1][paramCol] = 1
+# 		else:
+# 			rowMain = getRowMain(mat, i)
+# 			# C , p , q , dst (C : constant ; p,q,... : parameter)
+# 			for j in range(0, paramCol + 1):
+# 				for k in range(i+1, len(mat), 1):
+# 					solusi[i][j] -= mat[rowMain][k] * solusi[k][j]
 
-    return solusi
+# 	return solusi
 
-# mengembalikan matriks berisikan vektor-vektor eigen
+# # mengembalikan matriks berisikan vektor-vektor eigen
 
+# def solveGauss(mat):
+# 	upperMat, pivot = mat.rref() 
 
-def solveGauss(mat):
-    lowMat, upperMat = lu(mat, permute_l=True)
-    upperT = np.transpose(upperMat)
+# 	"""
+# 	lowMat, upperMat = lu(mat, permute_l=True)
+# 	x = len(upperMat)
+# 	for i in range(len(upperMat)):
+# 		divisor = upperMat[i][i]
+# 		if(divisor != 0):
+# 			for j in range(i, len(upperMat[0])):
+# 				upperMat[i][j] /= divisor
+# 	"""
+# 	upperT = np.transpose(upperMat)
 
-    added = np.array([0.0 for i in range(len(upperT[0]))])
-	#Error di append
-    np.append(upperT, [added], axis=0)
+# 	added = [0.0 for i in range(len(upperT[0]))]
+# 	# Error di append
+# 	appended = np.append(upperT, [added], axis=0)
 
-    newUpper = np.transpose(upperT)
+# 	newUpper = np.transpose(appended)
 
-    solusi = getValue(newUpper)
+# 	solusi = getValue(newUpper)
 
-    return solusi
+# 	return solusi
 
 
-'''***************************Vektor Eigen***************************'''
+# '''***************************Vektor Eigen***************************'''
 
 
-def findFinalMat(value, matT):
-    all = []
-    for i in range(len(matT)):
-        each = []
-        for j in range(len(matT[0])):
-            if(i == j):
-                each.append(value - matT[i][j])  # ngisi kalau diagonal
-            else:
-                each.append(-matT[i][j])  # ngisi selain diagonal
+# def findFinalMat(value, matT):
+# 	all = []
+# 	for i in range(len(matT)):
+# 		each = []
+# 		for j in range(len(matT[0])):
+# 			if(i == j):
+# 				each.append(value - matT[i][j])  # ngisi kalau diagonal
+# 			else:
+# 				each.append(-matT[i][j])  # ngisi selain diagonal
+# 		npeach = np.array(each)  # Convert ke np array
+# 		all.append(npeach)
 
-        npeach = np.array(each)  # Convert ke np array
-        all.append(npeach)
+# 	matAll = Matrix(all)
+# 	return matAll
 
-    matAll = Matrix(all)
-    return matAll
 
+# # membentuk matriks singular (pembentuk matriks U dan V)
+# def makeMatEigen(mat, matEigen):
+# 	transpose_solusi = np.transpose(mat)
+# 	for i in range(1, len(mat[0])):
+# 		if(transpose_solusi[i][len(transpose_solusi[i]) - 1] == 1):
+# 			newVector = transpose_solusi[i][0:(len(transpose_solusi[i]) - 1)]
+# 			matEigen.append(newVector)
 
-# membentuk matriks singular (pembentuk matriks U dan V)
-def makeMatEigen(mat, matEigen):
-    transpose_solusi = np.transpose(mat)
-    for i in range(1, len(mat[0])):
-        matEigen.append(transpose_solusi[i])
+# 	return matEigen
 
-    return matEigen
 
+# '''***************************Vektor Eigen***************************'''
+# # createUEVt -> membentuk U dan ∑ dan V
+# # typeSingular = 0 -> membentuk U dan ∑
+# # typeSingular = 1 -> membentuk V
 
-'''***************************Vektor Eigen***************************'''
-# createUEVt -> membentuk U dan ∑ dan V
-# typeSingular = 0 -> membentuk U dan ∑
-# typeSingular = 1 -> membentuk V
 
+# def createUEVt(mat, typeSingular):
+# 	if(typeSingular == 0):  # AAT
+# 		matT = np.matmul(mat, np.transpose(mat))
+# 	else:  # ATA
+# 		matT = np.matmul(np.transpose(mat), mat)
 
-def createUEVt(mat, typeSingular):
+# 	roots, sigma = findroots(matT)
+# 	matEigen = []
 
-    if(typeSingular == 0):
-        matT = np.matmul(mat, np.transpose(mat))
-    else:
-        matT = np.matmul(np.transpose(mat), mat)
+# 	# membentuk matriks vektor eigen / matriks singular
+# 	# roots -> array isinya lambda, buat diap lambda butuh cari basis eigen
+# 	#roots = [a,b,c,d]
+# 	for root in roots:
+# 		finalbanget = findFinalMat(root, matT)
+# 		solusi = solveGauss(finalbanget)
+# 		matEigen = makeMatEigen(solusi, matEigen)
 
-    roots, sigma = findroots(matT)
-    matEigen = []
+# 	matE = Matrix(matEigen)
 
-  # membentuk matriks vektor eigen / matriks singular
-    for root in roots:
-        solusi = solveGauss(findFinalMat(root, matT))
-        matEigen = makeMatEigen(solusi, matEigen)
+# 	# membentuk matriks ∑
+# 	matSigma = [[0 for i in range(len(mat[0]))] for j in range(len(mat))]
+# 	count = 0
+# 	while (count < len(sigma)):
+# 		matSigma[count][count] = sigma[count]
+# 		count += 1
 
-    matE = Matrix(matEigen)
+# 	# membentuk matriks transpose Vt untuk matriks singular V
+# 	if(typeSingular == 1):
+# 		matE = np.transpose(matE)
 
-  # membentuk matriks ∑
-    matSigma = [[0 for i in range(len(mat[0]))] for j in range(len(mat))]
-    count = 0
-    while (count <= len(sigma)):
-        matSigma[count][count] = sigma[count]
-        count += 1
+# 	return matE, matSigma
 
-  # membentuk matriks transpose Vt untuk matriks singular V
-    if(typeSingular == 1):
-        matE = np.transpose(matE)
 
-    return matE, matSigma
+# '''***********************************SVD***********************************'''
+# # test case
+# mat = [[1, 2, 3],
+# 	   [4, 5, 6],
+# 	   [7, 8, 9],
+# 	   [10, 11, 12]]
 
+# for i in range(0, 2, 1):
+# 	# i == 0 -> U (4x4), sigma (4x3) 
+# 	# i == 1 -> v (3x3)
 
-'''***********************************SVD***********************************'''
-# test case
-mat = [[1, 2, 3],
-       [4, 5, 6],
-       [7, 8, 9],
-       [10, 11, 12]]
+# 	matEigen, matSigma = createUEVt(mat, i)
 
-for i in range(0, 2, 1):
-    matEigen, matSigma = createUEVt(mat, i)
+# 	print("OKE")
+# 	if(i == 0):
+# 		print(matEigen)
+# 	else:
+# 		for line in matEigen:
+# 			print(line)
 
-    for line in matEigen:
-        print(line)
+# 	print("Check")
+# 	for line in matSigma:
+# 		print(line)
 
-    for line in matSigma:
-        print(line)
