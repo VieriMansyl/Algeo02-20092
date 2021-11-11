@@ -1,34 +1,42 @@
-#Tool untuk mencari nilai eigen dan sigma
+'''
+README
+
+File ini berisi fungsi dan prosedur yang diperlukan untuk mencari nilai eigen.
+	1. fungsi rounding, akan melakukan pembulatan kepada nilai floating point dengan toleransi 1e-12
+	2. fungsi convRootEig, akan melakukan pemilihan dari akar-akar persamaan menjadi nilai eigen dan sigma
+	3. fungsi convDet, akan menerima sebuah persamaan determinan, yang kemudian akan dicari akar-akarnya dengan memanfaatkan 
+	bantuan library sympy
+	4. fungsi findDeter, akan menerima sebuah matriks (AAT atau ATA) dan variabel, kemudian akan membentuk matriks lambdaI - AAT 
+	atay matriks lambdaI - ATA kemudian dicari determinannya dengan memanfaatkan sympy. Perlu diperhatikan bahwa matriks dan persamaan
+	yang dikembalikan akan berbentuk persamaan dengan memanfaatkan Symbol di sympy
+'''
 
 import numpy as np
 import sympy as sy
-import scipy as sc
+import math
 
-def rounding(val):
-	cekRound = 0.00000000001		#10^-12
-	valRound = round(val)
+def rounding(val):	
+	valRound = round(val)	
 	
-	if((valRound  - val) < cekRound):
+	#Toleransi : 1e-9
+	if(math.isclose(val, valRound, rel_tol=1e-12)):
 		val = valRound
 		
 	return val
 
 #Menerima Koefisien Persamaan, kemudian dicari akar-akarnya
-def convKoefRoot(rawroot):
+def convRootEig(rawroot):
 	newroot = []
 	newsigma = []
 
 	for root in rawroot:
 		if(root > 0):
 			newroot.append(rounding(root))
-			newsigma.append(rounding(root ** 0.5))
+			newsigma.append(rounding(root) ** 0.5)
 		elif(root == 0):
 			if(0 not in newsigma):
-				newroot.append(rounding(root))
-				newsigma.append(rounding(root ** 0.5))
-
-	sigma = np.array(newsigma)
-	finalroot = np.array(newroot)
+				newroot.append(0)
+				newsigma.append(0)
 
 	return newroot, newsigma
 
@@ -44,7 +52,7 @@ def convDet(determinant):
 
 	froot = froot[::-1]
 
-	eigenval, sigmaval = convKoefRoot(froot)
+	eigenval, sigmaval = convRootEig(froot)
 	return eigenval, sigmaval
 
 

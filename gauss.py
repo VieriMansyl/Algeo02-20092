@@ -1,4 +1,16 @@
-import numpy as np
+'''
+README
+
+Gauss.py berisikan ->
+1. getRowMain(mat, i)           : mencari 1 utama yang berkorespondensi terhadap tiap variabel (x1,x2,...x ke-n) pada matriks eselon
+2. getValue(mat)                : mengembalikan nilai tiap variabel (x1,x2,...x ke-n) bersesuaian pada matriks
+3. makeGauss(mat)               : membentuk matriks eselon baris
+4. isColZero(mat, row, col)     : true jika seluruh nilai pada 1 kolom dibawah "1 utama" adalah 0 , false jika tidak
+5. changeplace(mat, row, col)   : Menukar baris dengan elemen terdefinisi pada kolom ke-col
+6. bagi1utama(mat, row, col)    : konversi elemen menjadi 1 utama disesuaikan pada baris ke-row tersebut
+7. makeZero(mat, row, col, pas) : konversi elemen menjadi 0 yang berada di bawah 1 utama disesuaikan pada seluruh row
+'''
+
 
 def getRowMain(mat, i):
     found1Utama = False
@@ -23,8 +35,6 @@ def getRowMain(mat, i):
     return row
 
 # mengembalikan nilai tiap variabel (x1,x2,...x ke-n) bersesuaian pada matriks
-
-
 def getValue(mat):
     idx_UNDEF = 999
     paramCol = 0
@@ -46,9 +56,6 @@ def getValue(mat):
                     solusi[i][j] -= mat[rowMain][k] * solusi[k][j]
 
     return solusi
-
-# mengembalikan matriks berisikan vektor-vektor eigen
-
 
 
 def isColZero(mat, row, col):
