@@ -58,7 +58,7 @@ def convDet(determinant):
 
 #Mencari persamaan determinan dan mengembalikan 
 def findDeter(matT, vars):
-
+	print("YES")
 	all = []
 	for i in range(len(matT)):
 		each = []
@@ -70,9 +70,7 @@ def findDeter(matT, vars):
 
 		npeach = np.array(each)  # Convert ke np array
 		all.append(npeach)
-
 	matAll = sy.Matrix(all)
 	deter = matAll.det()
-
 	return matAll, deter
 
