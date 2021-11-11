@@ -54,12 +54,14 @@
                     </div>
                     <div id="compression">
                         Image compression time: 
-                        <p id="compression-time"></p>
+                        <p id="compression-time">{{ time }}</p>
                     </div>
                 </div>
 
                 <div id="download-button">
-                    <button>Download</button>
+                    <a href = {{ after }} download>
+                        <button>Download</button>
+                    </a>
                 </div>
             </div>
 
