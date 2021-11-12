@@ -33,13 +33,18 @@ def createSigmaMat(sigma, nrow, ncol):
 	return sigmaMat
 
 
-def createFinalMat(value, mat, neff, var):
-	copyMat = copy.deepcopy(mat)
-	for i in range(neff):
-		const = copyMat[i][i] - var  # Get constanta
-		copyMat[i][i] = value + const #Convert every diagonal
-		copyMat[i].append(0)
-		
+def createFinalMat(value, mat, nrow, ncol):
+	copyMat = []
+	for i in range(nrow):
+		eachrow = []
+		for j in range(ncol):  # Get constanta
+			if(i == j):
+				eachrow.append(value - mat[i][i]) #Convert every diagonal
+			else:
+				eachrow.append(-mat[i][j])
+		eachrow.append(0)
+		copyMat.append(eachrow)
+				
 	return copyMat
 
 

@@ -10,67 +10,56 @@ File ini berisi fungsi dan prosedur yang diperlukan untuk mencari nilai eigen.
 	atay matriks lambdaI - ATA kemudian dicari determinannya dengan memanfaatkan sympy. Perlu diperhatikan bahwa matriks dan persamaan
 	yang dikembalikan akan berbentuk persamaan dengan memanfaatkan Symbol di sympy
 '''
-
+import copy
 import numpy as np
+from numpy.core.fromnumeric import sort
 import sympy as sy
+from sympy import det
 import math
 
 def rounding(val):	
 	valRound = round(val)	
 	
 	#Toleransi : 1e-9
-	if(math.isclose(val, valRound, rel_tol=1e-12)):
+	if(math.isclose(val, valRound, rel_tol=1e-9)):
 		val = valRound
 		
 	return val
 
 #Menerima Koefisien Persamaan, kemudian dicari akar-akarnya
-def convRootEig(rawroot):
+def convEigSig(rawroot):
+	# print("RAW")
+	# print(rawroot)
 	newroot = []
 	newsigma = []
 
 	for root in rawroot:
 		if(root > 0):
 			newroot.append(rounding(root))
-			newsigma.append(rounding(root) ** 0.5)
+			newsigma.append((rounding(root) ** 0.5))
 		elif(root == 0):
 			if(0 not in newsigma):
 				newroot.append(0)
-				newsigma.append(0)
 
 	return newroot, newsigma
 
+def findEigen(mat):
+	dummy = copy.deepcopy(mat)
+	dummy1 = []
 
-#Menerima Persamaan Determinan, diubah menjadi koefisien
-def convDet(determinant):
-	koef = sy.Poly(determinant).all_coeffs()  # Create koeficient lienar equation
+	while True:
+		q, r = np.linalg.qr(dummy)
+		dummy1 = np.dot(r, q)
 
-	froot = np.roots(koef)  # Cari akar-akar persamaan
-
-	# Sort descending
-	froot.sort()
-
-	froot = froot[::-1]
-
-	eigenval, sigmaval = convRootEig(froot)
-	return eigenval, sigmaval
-
-
-#Mencari persamaan determinan dan mengembalikan 
-def findDeter(matT, vars):
-	print("YES")
-	all = []
-	for i in range(len(matT)):
-		each = []
-		for j in range(len(matT[0])):
-			if(i == j):
-				each.append(vars - matT[i][j])  # ngisi kalau diagonal
-			else:
-				each.append(-matT[i][j])  # ngisi selain diagonal
-
-		npeach = np.array(each)  # Convert ke np array
-		all.append(npeach)
-	matAll = sy.Matrix(all)
-	deter = matAll.det()
-	return matAll, deter
-
+		similar = True
+		for j in range(len(dummy)):
+			if(not math.isclose(dummy[j][j], dummy1[j][j], rel_tol=1e-12)):
+				similar = False
+				break
+		
+		if(similar):
+			break
+		else:
+			dummy = copy.deepcopy(dummy1)
+	
+	return np.diag(dummy1)

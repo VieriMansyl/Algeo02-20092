@@ -11,6 +11,7 @@ Gauss.py berisikan ->
 7. makeZero(mat, row, col, pas) : konversi elemen menjadi 0 yang berada di bawah 1 utama disesuaikan pada seluruh row
 '''
 
+import math
 
 def getRowMain(mat, i):
     found1Utama = False
@@ -99,6 +100,8 @@ def makeZero(mat, row, col, pas):
     # print(divisor)
     while (j < len(mat[0])):
         mat[row][j] -= (divident / divisor) * mat[pas][j]
+        if(math.isclose(mat[row][j] , 0 , abs_tol= 1e-6)):
+            mat[row][j] = 0
         j += 1
 
     return mat
@@ -139,6 +142,5 @@ def makeGauss(mat):
         pas += 1
 
     return mat
-
 
 
