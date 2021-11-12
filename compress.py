@@ -81,62 +81,68 @@ def process(mat , cr):
 	finalATA = matATA.tolist()
 
 
-	raweig1 = eigen.findEigen(matAAT)
+	raweig1, raweigv1 = eigen.findEigen(matAAT)
 	# print(raweig1)
 	# print("Eigen 1")
-	raweig2 = eigen.findEigen(matATA)
+	raweig2, raweigv2 = eigen.findEigen(matATA)
+	# print(raweigv2)
 	# print(raweig2)
 	# print("Eigen 2")
 
-	eig1, sig1 = eigen.convEigSig(raweig1)
-	eig2, sig2 = eigen.convEigSig(raweig2)
+	print(raweig1)
+	print(raweig2)
+	print(raweigv1)
+	print(raweigv2)
+
+	eig1, sig, matU = eigen.convEigSig(raweig1, raweigv1)
+	eig2, sig2, matV = eigen.convEigSig(raweig2, raweigv2)
 
 	# print(eig1)
 	# print(eig2)
 	# print(sig2)
 
-	k = findK(cr, len(sig2))
+	# k = findK(cr, len(sig2))
 
-	sigmaMat = svd.createSigmaMat(sig2, k, k) #Matriks Sigma, berbentuk list biasa
+	sigmaMat = svd.createSigmaMat(sig2, nrow, ncol) #Matriks Sigma, berbentuk list biasa
 	# for line in sigmaMat:
 	# 	print(line)
 	# print("Sigma")
-	matU = [] #Basis yang udah di normalisasi
-	matV = []
+	# matU = [] #Basis yang udah di normalisasi
+	# matV = []
 
 	#Untuk Matriks U
-	for val1 in eig1:
-		matFinal = svd.createFinalMat(val1, finalAAT, nrow, nrow)
-		# for line in matFinal:
-		# 	print(line)
+	# for val1 in eig1:
+	# 	matFinal = svd.createFinalMat(val1, finalAAT, nrow, nrow)
+	# 	# for line in matFinal:
+	# 	# 	print(line)
 
-		reducedMat = gauss.makeGauss(matFinal) #Matriks Baris
+	# 	reducedMat = gauss.makeGauss(matFinal) #Matriks Baris
 
-		# for line in reducedMat:
-		# 	print(line)
-		solGauss = gauss.getValue(reducedMat)
-		matU = svd.makeMatEigen(solGauss , matU)
-		if (len(matU) == k):
-			break
-		elif(len(matU) > k):
-			matU = matU[:k]
-			break
+	# 	# for line in reducedMat:
+	# 	# 	print(line)
+	# 	solGauss = gauss.getValue(reducedMat)
+	# 	matU = svd.makeMatEigen(solGauss , matU)
+	# 	if (len(matU) == k):
+	# 		break
+	# 	elif(len(matU) > k):
+	# 		matU = matU[:k]
+	# 		break
 	print("U")
 	#Untuk Matriks V
-	for val2 in eig2:
-		matFinal = svd.createFinalMat(val2, finalATA, ncol, ncol)
-		reducedMat = gauss.makeGauss(matFinal) #Matriks Baris
-		solGauss = gauss.getValue(reducedMat)
+	# for val2 in eig2:
+	# 	matFinal = svd.createFinalMat(val2, finalATA, ncol, ncol)
+	# 	reducedMat = gauss.makeGauss(matFinal) #Matriks Baris
+	# 	solGauss = gauss.getValue(reducedMat)
 
-		matV = svd.makeMatEigen(solGauss , matV)
-		if (len(matV) == k):
-			break
-		elif(len(matV) > k):
-			matV = matV[:k]
-			break
-	print("v")
-
-	return multiplyMat(np.transpose(matU) , sigmaMat ,  matV)
+	# 	matV = svd.makeMatEigen(solGauss , matV)
+	# 	if (len(matV) == k):
+	# 		break
+	# 	elif(len(matV) > k):
+	# 		matV = matV[:k]
+	# 		break
+	# print("v")
+	
+	return matU , sigmaMat , matV
 
 
 def multiplyMat(mu, sig, mv):
@@ -146,31 +152,33 @@ def multiplyMat(mu, sig, mv):
 
 
 
-compress("static/10x10.jpg", 100)
+# compress("static/10x10.jpg", 100)
 # m x k
 # k x k
 # k X n
 
 # 2 x 3
+# 2 x 2
+# 2 x 3
+# 3 x 3
 
-# arr = [[3,1,1],
-# 	   [-1,3,1]]
+arr = [[3,2,2],
+	   [2,3,-2]]
 
-# matArr = sy.Matrix(arr)
-# mu, sig, mv= process(matArr, 100)
-# print("ini mu :")
-# for line in mu:
-# 	print(line)
-# print("\nini sig :")
-# for line in sig:
-# 	print(line)
-# print("\nini mv :")
-# for line in mv:
-# 	print(line)
+mu, sig, mv= process(np.array(arr), 100)
+print("ini mu :")
+for line in mu:
+	print(line)
+print("\nini sig :")
+for line in sig:
+	print(line)
+print("\nini mv :")
+for line in mv:
+	print(line)
 
-# mul1 = np.matmul(mu, sig)
-# mul2 = np.matmul(mul1, mv)
-# print(mul2)
+mul1 = np.matmul(mu, sig)
+mul2 = np.matmul(mul1, mv)
+print(mul2)
 
 
 # arr1 = [[223, 219, 216, 215, 215, 216, 216],
