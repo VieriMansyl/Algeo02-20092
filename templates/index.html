@@ -28,6 +28,8 @@
                         Image Compression Rate: 
                         <input type="text" name="ratetobeinputted" id="" placeholder = "0">
                         %
+                        <br>
+                        Note: 0 tidak terkompres sama sekali, 100 terkompres maksimal
                 	</div>
 	            </form>
                  
@@ -49,12 +51,12 @@
             <div id="footer">
                 <div id="effect-detail">
                     <div id="percentage">
-                        Image pixel difference percentage: 
+                        Image pixel difference percentage: {{ pix }} {{ pers }}
                         <p id="percentage-number"></p>
                     </div>
                     <div id="compression">
                         Image compression time: 
-                        <p id="compression-time">{{ time }}</p>
+                        <p id="compression-time">{{ time }} {{ sec }}</p>
                     </div>
                 </div>
 

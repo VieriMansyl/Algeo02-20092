@@ -8,8 +8,8 @@ File ini berisi fungsi dan prosedur yang diperlukan untuk mencari nilai eigen.
 import copy
 import numpy as np
 from numpy.core.fromnumeric import sort
-import sympy as sy
-from sympy import det
+#import sympy as sy
+#from sympy import det
 import math
 
 def rounding(val):	

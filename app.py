@@ -25,11 +25,14 @@ def main_page():
 		data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
 
 		# compress.compress(data, compression_rate)
-		compress_time = compress.compress(imgpath, compression_rate) # Fungsi dari main.py (SVD)
+		compress_time, pix_res = compress.compress(imgpath, int(compression_rate)) # Fungsi dari compress.py (SVD)
 
-		afterPath = os.path.join('static', 'hasil' + '.' + extension)
+		afterPath = os.path.join('static', 'result' + '.' + extension)
 
-		return flask.render_template('index.html', before=imgpath, after=afterPath, time=compress_time) # Tampilan di HTML (Setelah tekan tombol submit)
+		# Merapihkan UI web
+		persen = "%"
+		detik = "seconds"
+		return flask.render_template('index.html', before=imgpath, after=afterPath, time=compress_time, pix=pix_res, pers=persen, sec=detik) # Tampilan di HTML (Setelah tekan tombol submit)
 	else:
 		img_filename = os.path.join('static', 'test-img.jpg')
 		return flask.render_template('index.html', before=img_filename, after=img_filename) # Tampilan di HTML (Sebelum tekan tombol submit)

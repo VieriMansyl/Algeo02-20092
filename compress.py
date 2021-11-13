@@ -21,6 +21,17 @@ README
 # lalu hasilnya disimpan dalam folder static
 # dan me-return directory dari foto tersebut
 def compress(image, compression_rate):
+	# Mempersingkat waktu untuk foto yang berukuran besar
+	if compression_rate==0:
+		start = time.time()
+		src = cv.imread(image, cv.IMREAD_UNCHANGED)
+		extension = image.split('.')[-1]
+		pathwrite = "static/result." + extension
+		cv.imwrite(pathwrite, src)
+		end = time.time()
+		delta = end - start
+		return delta,0
+
 	extension = image.split('.')[-1]
 
 	start = time.time()			# End
@@ -28,13 +39,25 @@ def compress(image, compression_rate):
 	# return("static/hasil.png")
 	src = cv.imread(image, cv.IMREAD_UNCHANGED)
 
-	b, g, r, a = cv.split(src)	 # b, g, r masing-masing channel
+	b = []
+	g = []
+	r = []
+	a = []
+
+	# a hanya dideklarasi khusus png
+	if(extension == 'png'):
+		b, g, r, a = cv.split(src)	 # b, g, r masing-masing channel
+	else:
+		b, g, r = cv.split(src)
 
 	#Ubah tiap channel ke list, pemrosesan yang dilakukan berbasis untuk list
 	blist = b.tolist()
 	glist = g.tolist()
 	rlist = r.tolist()
-	alist = a.tolist()
+	alist = []
+	# a hanya dideklarasi khusus png
+	if(extension == 'png'):
+		alist = a.tolist()
 
 	nrow = len(blist)
 	ncol = len(blist[0])
@@ -47,21 +70,24 @@ def compress(image, compression_rate):
 	gfinal, k = process(glist, compression_rate, max(nrow, ncol))
 	rfinal, k = process(rlist, compression_rate, max(nrow, ncol))
 
-
-	finalsrc = np.dstack([bfinal, gfinal, rfinal, alist])
+	finalsrc = 0
+	if(extension == 'png'):
+		finalsrc = np.dstack([bfinal, gfinal, rfinal, alist]) # 4 khusus png
+	else:
+		finalsrc = np.dstack([bfinal, gfinal, rfinal]) # 3 selain png
 	
-	btoshow = bfinal / 255
-	gtoshow = gfinal / 255
-	rtoshow = rfinal/255
-	srctoshow = np.dstack([btoshow, gtoshow, rtoshow])
+	# btoshow = bfinal / 255
+	# gtoshow = gfinal / 255
+	# rtoshow = rfinal / 255
+	# srctoshow = np.dstack([btoshow, gtoshow, rtoshow])
 
 	
 
-	cv.imshow("", srctoshow)
-	key = cv.waitKey(0)
+	# cv.imshow("", srctoshow)
+	# key = cv.waitKey(0)
 
-	if(key == ord('c')):
-		cv.destroyAllWindows()
+	# if(key == ord('c')):
+	# 	cv.destroyAllWindows()
 
 	pathwrite = "static/result." + extension
 
@@ -71,6 +97,10 @@ def compress(image, compression_rate):
 	end = time.time()
 	delta = end - start
 	
+	# pixeldiff = abs(pixdiff(nrow, ncol, k) - compression_rate)
+	# if (pixeldiff > 100):
+	# 	pixeldiff -= 100
+
 	pixeldiff = pixdiff(nrow, ncol, k)
 	return delta, pixeldiff
 
@@ -121,5 +151,5 @@ def multiplyMat(mu, sig, mv):
 	mul2 = np.matmul(mul1, mv)
 	return mul2
 
-delta, pix = compress("static/ball.png", 100)
-print(pix)
+#delta, pix = compress("static/ball.png", 100)
+#print(pix)
