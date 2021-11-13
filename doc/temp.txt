@@ -1,0 +1,3 @@
+Format penamaan laporan adalah sebagai berikut: 
+Algeo02-XXXXX.pdf dengan XXXXX adalah lima digit terakhir NIM anggota 
+terkecil
