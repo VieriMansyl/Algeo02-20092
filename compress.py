@@ -21,6 +21,8 @@ README
 # lalu hasilnya disimpan dalam folder static
 # dan me-return directory dari foto tersebut
 def compress(image, compression_rate):
+	extension = image.split('.')[-1]
+
 	start = time.time()			# End
 
 	# return("static/hasil.png")
@@ -34,13 +36,16 @@ def compress(image, compression_rate):
 	rlist = r.tolist()
 	alist = a.tolist()
 
+	nrow = len(blist)
+	ncol = len(blist[0])
 	#Oke jadi ini agak weird, tapi kalau mau disave, gak boleh dibagi 1/255
 	#Tapi kalau buat show, harus dibagi sama 255, jadi sementara, aku buat 2 jenis 
 	#Satu buat show, satu buat save
 
-	bfinal = process(blist, compression_rate)
-	gfinal = process(glist, compression_rate)
-	rfinal = process(rlist, compression_rate)
+
+	bfinal, k = process(blist, compression_rate, max(nrow,ncol))
+	gfinal, k = process(glist, compression_rate, max(nrow, ncol))
+	rfinal, k = process(rlist, compression_rate, max(nrow, ncol))
 
 
 	finalsrc = np.dstack([bfinal, gfinal, rfinal, alist])
@@ -50,38 +55,45 @@ def compress(image, compression_rate):
 	rtoshow = rfinal/255
 	srctoshow = np.dstack([btoshow, gtoshow, rtoshow])
 
+	
+
 	cv.imshow("", srctoshow)
 	key = cv.waitKey(0)
 
 	if(key == ord('c')):
 		cv.destroyAllWindows()
 
+	pathwrite = "static/result." + extension
 
-	cv.imwrite("static/result.png", finalsrc)
+	cv.imwrite(pathwrite, finalsrc)
 
 	#Calculating time
 	end = time.time()
 	delta = end - start
 	
-	return delta
+	pixeldiff = pixdiff(nrow, ncol, k)
+	return delta, pixeldiff
 
+def pixdiff(nrow, ncol, k):
+	calc = (nrow * k) + k + (ncol *k)
+	return (calc/(nrow*ncol)) * 100
 
 def findK(cr, singVal):
-	k = (cr/100) * singVal
+	k = ((100 - cr + 1)/100) * singVal
 
 	#Tentuin sistem Rounding
 	return round(k)
 
 #cr -> compression reate
 #Asumsi mat -> m * n
-def process(mat , cr):
+def process(mat , cr, maxiter):
 	matT = np.transpose(mat)
 
 	#Basis buat mbuat V
 	matATA = np.matmul(matT, mat)
 
 	#Pencarian dan pemrosesan nilai eigen
-	raweig2, raweigv2 = eigen.findEigen(matATA)
+	raweig2, raweigv2 = eigen.findEigen(matATA, maxiter)
 
 	eig2, sig2, matV = eigen.convEigSig(raweig2, raweigv2)
 
@@ -101,7 +113,7 @@ def process(mat , cr):
 	matUT = np.transpose(matU)
 	finalU = matUT[:k]
 	
-	return multiplyMat(np.transpose(finalU), sigmaMat, finalV)
+	return multiplyMat(np.transpose(finalU), sigmaMat, finalV), k
 
 
 def multiplyMat(mu, sig, mv):
@@ -109,4 +121,5 @@ def multiplyMat(mu, sig, mv):
 	mul2 = np.matmul(mul1, mv)
 	return mul2
 
-# delta = compress("static/rose.png", 10)
+delta, pix = compress("static/ball.png", 100)
+print(pix)

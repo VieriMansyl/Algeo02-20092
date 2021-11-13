@@ -39,12 +39,12 @@ def convEigSig(rawroot, rawvec):
 
 	return newroot, newsigma, newvec
 
-def findEigen(mat):
+def findEigen(mat, maxiter):
 	pq = np.eye(mat.shape[0])
 	dummy = copy.deepcopy(mat)
 	dummy1 = []
 
-	for i in range(100):
+	for i in range(maxiter):
 		q, r = np.linalg.qr(dummy)
 		pq = np.dot(pq, q)
 		dummy1 = np.dot(r, q)
