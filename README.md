@@ -1,6 +1,6 @@
 # Tugas Besar 2 IF2123 Aljabar Linier dan Geometri
 
-> Membuat website yang dihost pada lokal yang dapat menerima inputan foto dan persentase kompresi lalu menghasilkan foto yang terkompres yang dapat didownload oleh pengguna.
+> Membuat website yang dihost pada lokal yang dapat menerima inputan berupa foto dan persentase kompresi yang diinginkan lalu menghasilkan foto yang terkompres sesuai input yang diberikan pengguna yang di mana foto tersebut dapat di-download oleh pengguna
 
 ## Daftar Anggota Kelompok
 
@@ -14,7 +14,7 @@
 
 </table>
 
-## Teknologi yang digunakan
+## Teknologi dan Library yang Digunakan
 1. Python 3.8.0
 2. click 8.0.3
 3. colorama 0.4.4
