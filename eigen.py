@@ -2,13 +2,8 @@
 README
 
 File ini berisi fungsi dan prosedur yang diperlukan untuk mencari nilai eigen.
-	1. fungsi rounding, akan melakukan pembulatan kepada nilai floating point dengan toleransi 1e-12
+	1. fungsi rounding, akan melakukan pembulatan kepada nilai floating point dengan toleransi 1e-9
 	2. fungsi convRootEig, akan melakukan pemilihan dari akar-akar persamaan menjadi nilai eigen dan sigma
-	3. fungsi convDet, akan menerima sebuah persamaan determinan, yang kemudian akan dicari akar-akarnya dengan memanfaatkan 
-	bantuan library sympy
-	4. fungsi findDeter, akan menerima sebuah matriks (AAT atau ATA) dan variabel, kemudian akan membentuk matriks lambdaI - AAT 
-	atay matriks lambdaI - ATA kemudian dicari determinannya dengan memanfaatkan sympy. Perlu diperhatikan bahwa matriks dan persamaan
-	yang dikembalikan akan berbentuk persamaan dengan memanfaatkan Symbol di sympy
 '''
 import copy
 import numpy as np
@@ -28,8 +23,6 @@ def rounding(val):
 
 #Menerima Koefisien Persamaan, kemudian dicari akar-akarnya
 def convEigSig(rawroot, rawvec):
-	# print("RAW")
-	# print(rawroot)
 	rawvecT = np.transpose(rawvec)
 	newroot = []
 	newsigma = []
@@ -68,14 +61,16 @@ def findEigen(mat):
 	
 	return  np.diag(dummy1), pq
 
-# arr = np.array([[3,1,1],[-1,3,1]])
+def createSigmaMat(sigma, nrow, ncol):
+	sigmaMat = []
 
+	for i in range(nrow):
+		eachRow = []
+		for j in range(ncol):
+			if(i == j):
+				eachRow.append(sigma[i])
+			else:
+				eachRow.append(0)
+		sigmaMat.append(eachRow)
 
-
-# pq, val = findEigen(np.matmul(arr, np.transpose(arr)))
-# pq1,val1 = findEigen(np.matmul(np.transpose(arr), arr))
-# print(val)
-# print(pq)
-
-# print(pq1)
-# print(val1)
+	return sigmaMat
