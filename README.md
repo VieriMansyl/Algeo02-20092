@@ -32,7 +32,7 @@
 
 1. Download atau clone repo ini
 2. Jalankan Windows PowerShell
-3. Buka folder repo ini
+3. Buka folder src repo ini
 4. Buat Virtual Environment Python
 
     ```bash
