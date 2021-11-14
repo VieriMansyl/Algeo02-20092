@@ -27,6 +27,9 @@ def main_page():
 		# compress.compress(data, compression_rate)
 		compress_time, pix_res = compress.compress(imgpath, int(compression_rate)) # Fungsi dari compress.py (SVD)
 
+		compress_time = round(compress_time, 3)
+		pix_res = round(pix_res, 3)
+
 		afterPath = os.path.join('static', 'result' + '.' + extension)
 
 		# Merapihkan UI web

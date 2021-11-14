@@ -22,7 +22,7 @@ README
 # dan me-return directory dari foto tersebut
 def compress(image, compression_rate):
 	# Mempersingkat waktu untuk foto yang berukuran besar
-	if compression_rate==0:
+	if compression_rate<=0:
 		start = time.time()
 		src = cv.imread(image, cv.IMREAD_UNCHANGED)
 		extension = image.split('.')[-1]
@@ -31,6 +31,9 @@ def compress(image, compression_rate):
 		end = time.time()
 		delta = end - start
 		return delta,0
+
+	if (compression_rate>=100):
+		compression_rate = 99
 
 	extension = image.split('.')[-1]
 
@@ -106,7 +109,7 @@ def compress(image, compression_rate):
 
 def pixdiff(nrow, ncol, k):
 	calc = (nrow * k) + k + (ncol *k)
-	return (calc/(nrow*ncol)) * 100
+	return ((nrow*ncol)/calc) # * 100
 
 def findK(cr, singVal):
 	k = ((100 - cr + 1)/100) * singVal
