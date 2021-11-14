@@ -15,16 +15,18 @@
 </table>
 
 ## Teknologi dan Library yang Digunakan
-1. Python 3.8.0
-2. click 8.0.3
-3. colorama 0.4.4
-4. Flask 2.0.2
-5. itsdangerous 2.0.1
-6. Jinja2 3.0.3
-7. MarkupSafe 2.0.1
-8. numpy 1.21.4
-9. opencv-python 4.5.4.58
-10. Werkzeug 2.0.2
+* HTML
+* CSS
+* Python 3.8.0
+    * click 8.0.3
+    * colorama 0.4.4
+    * Flask 2.0.2
+    * itsdangerous 2.0.1
+    * Jinja2 3.0.3
+    * MarkupSafe 2.0.1
+    * numpy 1.21.4
+    * opencv-python 4.5.4.58
+    * Werkzeug 2.0.2
 
 ## Cara Memakai
 
